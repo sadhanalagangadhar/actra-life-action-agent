@@ -1,0 +1,3 @@
+import admin from 'firebase-admin';let db;
+export function initFirebase(){if(admin.apps.length){db=admin.firestore();return admin;}const key=(process.env.FIREBASE_PRIVATE_KEY||'').replace(/\\n/g,'\n');if(!process.env.FIREBASE_PROJECT_ID||!process.env.FIREBASE_CLIENT_EMAIL||!key)throw new Error('Firebase Admin credentials are not configured.');admin.initializeApp({credential:admin.credential.cert({projectId:process.env.FIREBASE_PROJECT_ID,clientEmail:process.env.FIREBASE_CLIENT_EMAIL,privateKey:key})});db=admin.firestore();return admin}
+export function firestore(){if(!db)initFirebase();return db} export {admin};

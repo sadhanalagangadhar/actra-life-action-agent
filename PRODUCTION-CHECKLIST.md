@@ -1,0 +1,23 @@
+# ACTRA Production Launch Checklist
+
+- [ ] Firebase Authentication Google provider enabled
+- [ ] Firestore enabled and `firestore.rules` deployed
+- [ ] Firebase Web App values placed in frontend `.env`
+- [ ] Firebase Admin service account values placed only in backend environment
+- [ ] `AUTH_MODE` removed or set to non-demo production authentication
+- [ ] OpenAI/Gemini provider configured and quota tested
+- [ ] Google Cloud OAuth consent screen configured
+- [ ] Gmail API and Calendar API enabled
+- [ ] Production OAuth redirect URI added exactly
+- [ ] ACTRA production URL added to authorized domains
+- [ ] HTTPS enabled
+- [ ] CORS limited to production origin
+- [ ] File upload size/type policy reviewed
+- [ ] Email sending tested with a real connected Gmail account
+- [ ] Calendar event tested with a real connected account
+- [ ] Duplicate-action behavior tested
+- [ ] AI hallucination/ambiguity cases tested
+- [ ] Account deletion tested
+- [ ] Mobile Chrome/Android testing completed
+- [ ] Error/retry/offline behavior tested
+- [ ] Privacy policy and terms published before public launch

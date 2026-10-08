@@ -1,0 +1,7 @@
+import {google} from 'googleapis';import {getIntegration,saveIntegration} from './store.js'
+const oauth=()=>new google.auth.OAuth2(process.env.GOOGLE_CLIENT_ID,process.env.GOOGLE_CLIENT_SECRET,process.env.GOOGLE_REDIRECT_URI)
+export function googleAuthUrl(uid){if(!process.env.GOOGLE_CLIENT_ID)throw new Error('Google OAuth is not configured');return oauth().generateAuthUrl({access_type:'offline',prompt:'consent',scope:['openid','email','https://www.googleapis.com/auth/gmail.send','https://www.googleapis.com/auth/gmail.readonly','https://www.googleapis.com/auth/calendar'],state:uid})}
+export async function googleCallback(code,uid){const o=oauth(),{tokens}=await o.getToken(code);await saveIntegration(uid,{googleTokens:tokens,connectedAt:new Date().toISOString()})}
+async function client(uid){const d=await getIntegration(uid);if(!d.googleTokens)throw new Error('Google account not connected');const o=oauth();o.setCredentials(d.googleTokens);return o}
+export async function sendMail(uid,to,subject,body){const g=google.gmail({version:'v1',auth:await client(uid)}),raw=Buffer.from(`To: ${to}\r\nSubject: ${subject}\r\nContent-Type: text/plain; charset=utf-8\r\n\r\n${body}`).toString('base64url');return g.users.messages.send({userId:'me',requestBody:{raw}})}
+export async function createCalendarEvent(uid,event){return google.calendar({version:'v3',auth:await client(uid)}).events.insert({calendarId:'primary',requestBody:event})}
